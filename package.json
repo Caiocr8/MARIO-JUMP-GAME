@@ -1,0 +1,12 @@
+{
+    "name": "Mario-Jump",
+    "version": "0.0.1",
+    "description": "GAME MARIO JUMP",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "node-static": "0.7.11"
+    }
+}

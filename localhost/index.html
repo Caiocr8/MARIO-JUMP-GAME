@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            overflow: hidden
+        }  
+ 
+        .game-board {
+            width: 100%;
+            height: 500px;
+            border-bottom: 15px solid rgb(35, 160, 35);
+            margin: 0 auto;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(#87CEEB, #E0F6FF);
+        }
+
+        .pipe {
+            position: absolute;
+            bottom: 0;
+            width: 80px;
+            animation: pipe-animation 1s infinite linear;
+        }     
+
+        .mario {
+            width: 150px;
+            position: absolute;
+            bottom: 0px;        
+        }
+
+        .jump {
+            animation: jump 500ms ease-out;
+        }
+
+        .clouds {
+            width: 550px;
+            position: absolute;
+            animation: clouds-animation 10s infinite linear;
+            margin-top: 5px;
+        }
+
+        .button {
+           display: flex;
+           justify-content: center;
+           background-image: url('./images/bg.jpg');
+           background-size: cover;
+           background-position: center;
+        }
+
+        .refresh {
+            box-sizing: border-box;
+            background-color: transparent;
+            border: 2px solid #e74c3c;
+            border-radius: 0.6em;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 1rem;    
+            line-height: 1;
+            margin: 20px;
+            padding: 1.2em 2.8em;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+
+            height: 60px;
+
+            border-color: #e74c3c;
+            color: #fff;
+            box-shadow: 0 0 40px 40px #e74c3c inset, 0 0 0 0 #e74c3c;
+            -webkit-transition: all 150ms ease-in-out;
+            transition: all 150ms ease-in-out;
+            
+            
+        }
+
+        .visibility {
+            visibility: hidden;
+        }
+
+        .refresh:hover , .refresh:focus {
+            color: #fff;
+            outline: 0;
+            box-shadow: 0 0 10px 0 #e74c3c inset, 0 0 10px 4px #e74c3c;
+        }
+        
+        .screen {
+            display: grid;
+            grid-template-rows: repeat(2, minmax(0, 1fr));
+   
+        }
+
+
+        @keyframes clouds-animation {
+            from {
+                right: -550px;
+            } to {
+                right: 100%;
+            }
+        }
+
+        @keyframes pipe-animation {
+            from {
+                right: -80px;
+            } to {
+                right: 100%;
+            }
+        }
+
+        @keyframes jump {
+
+            0% {
+                bottom: 0%;
+            }
+
+            40% {
+                bottom: 180px;
+            }
+
+            50% {
+                bottom: 180px;
+            }
+
+            60% {
+                bottom: 180px;
+            }
+
+            100% {
+                bottom: 0;
+            }
+        }
+
+    </style>
+
+    
+
+    <title>MARIO JUMP</title>
+</head>
+<body>
+
+    <div class="screen">
+        <div class="game-board">
+
+            <img src="./images/clouds.png" class="clouds" />
+            <img src="./images/mario.gif" class="mario" />
+            <img src="./images/pipe.png" class="pipe" />
+            
+        </div>
+    
+        <div class="button">
+            <button onclick="window.location.reload()" class="refresh visibility">PLAY AGAIN</button>
+        </div>
+    </div>
+ 
+    <script>
+        const mario = document.querySelector('.mario');
+        const pipe = document.querySelector('.pipe');
+        const clouds = document.querySelector('.clouds');
+        const button = document.querySelector('.visibility');
+
+        const jump = () => {
+            mario.classList.add('jump');
+
+            setTimeout(() => {
+                mario.classList.remove('jump');
+            }, 500)
+        }
+
+        const loop = setInterval(() => {
+            const pipePosition = pipe.offsetLeft;
+            const marioPosition = +window.getComputedStyle(mario).bottom.replace('px', '');
+            const cloudsPosition = clouds.offsetLeft;
+
+            console.log(marioPosition);
+            
+            if (pipePosition <= 120 && pipePosition > 0 && marioPosition <= 110) {
+
+                pipe.style.animation = 'none';
+                pipe.style.left = `${pipePosition}px`;
+
+                mario.style.animation = 'none';
+                mario.style.bottom = `${marioPosition}px`;
+
+                button.classList.remove('visibility');
+
+                clouds.style.left = `${cloudsPosition}px`;
+                
+                mario.src = './images/game-over.png';
+                mario.style.width = '75px';
+                mario.style.marginLeft = '50px';
+
+                clearInterval(loop);
+            }
+
+        }, 10);
+
+        document.addEventListener('keydown', jump);
+    </script>
+    
+</body>
+</html>
